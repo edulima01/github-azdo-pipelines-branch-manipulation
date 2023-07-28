@@ -1,0 +1,24 @@
+trigger: none
+pr: none
+
+steps:
+- checkout: self
+  persistCredentials: 'true'
+  fetchDepth: '0'
+- task: Bash@3
+  displayName: Creating release branch
+  inputs:
+    workingDirectory: $(Build.SourcesDirectory)
+    targetType: filePath
+    filePath: ./scripts/create-release-branch.sh
+  env:
+    SPRINT_BRANCH: $(Build.SourceBranchName)
+    RELEASE_BRANCH_PREFIX: release/v-
+- task: Bash@3
+  displayName: Deleting sprint branch
+  inputs:
+    workingDirectory: $(Build.SourcesDirectory)
+    targetType: filePath
+    filePath: ./scripts/delete-sprint-branch.sh
+  env:
+    SPRINT_BRANCH: sprint/$(Build.SourceBranchName)
