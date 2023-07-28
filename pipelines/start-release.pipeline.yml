@@ -10,10 +10,10 @@ steps:
   inputs:
     workingDirectory: $(Build.SourcesDirectory)
     targetType: filePath
-    filePath: ./scripts/create-release-branch.sh
+    filePath: ./scripts/create-branch.sh
   env:
-    SPRINT_BRANCH: $(Build.SourceBranchName)
-    RELEASE_BRANCH_PREFIX: release/v-
+    BRANCH_NAME: $(Build.SourceBranchName)
+    BRANCH_PREFIX: release/
 - task: Bash@3
   displayName: Deleting sprint branch
   inputs:
