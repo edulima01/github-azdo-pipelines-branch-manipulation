@@ -1,0 +1,3 @@
+BRANCH_FULL_NAME="$BRANCH_PREFIX$BRANCH_NAME"
+git branch $BRANCH_FULL_NAME
+git push --set-upstream origin $BRANCH_FULL_NAME

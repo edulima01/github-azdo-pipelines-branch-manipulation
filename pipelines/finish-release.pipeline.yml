@@ -1,0 +1,45 @@
+trigger: none
+pr: none
+
+steps:
+- checkout: self
+  persistCredentials: 'true'
+  fetchDepth: '0'
+- task: Bash@3
+  displayName: Set git author name/email
+  inputs:
+    workingDirectory: $(Build.SourcesDirectory)
+    targetType: inline
+    script: |
+      git config --global user.name "$GIT_AUTHOR_NAME"
+      git config --global user.email "$GIT_AUTHOR_EMAIL"
+  env:
+    GIT_AUTHOR_NAME: Azure DevOps Pipeline
+    GIT_AUTHOR_EMAIL: azdo.pipeline@cxp.digital
+- task: Bash@3
+  displayName: Merging release branch to main
+  inputs:
+    workingDirectory: $(Build.SourcesDirectory)
+    targetType: filePath
+    filePath: ./scripts/merge-release-branch-to-main.sh
+  env:
+    RELEASE_BRANCH: $(Build.SourceBranchName)
+    RELEASE_BRANCH_PREFIX: release/
+- task: Bash@3
+  displayName: Set next sprint branch name
+  inputs:
+    workingDirectory: $(Build.SourcesDirectory)
+    targetType: filePath
+    filePath: ./scripts/next-sprint-branch-name.sh
+  env:
+    CURRENT_BRANCH_NAME: $(Build.SourceBranchName)
+    NAME_VARIABLE: nextSprintBranchName
+- task: Bash@3
+  displayName: Create next sprint branch
+  inputs:
+    workingDirectory: $(Build.SourcesDirectory)
+    targetType: filePath
+    filePath: ./scripts/create-branch.sh
+  env:
+    BRANCH_NAME: $(nextSprintBranchName)
+    BRANCH_PREFIX: sprint/
