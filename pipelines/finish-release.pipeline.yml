@@ -2,20 +2,7 @@ trigger: none
 pr: none
 
 steps:
-- checkout: self
-  persistCredentials: 'true'
-  fetchDepth: '0'
-- task: Bash@3
-  displayName: Set git author name/email
-  inputs:
-    workingDirectory: $(Build.SourcesDirectory)
-    targetType: inline
-    script: |
-      git config --global user.name "$GIT_AUTHOR_NAME"
-      git config --global user.email "$GIT_AUTHOR_EMAIL"
-  env:
-    GIT_AUTHOR_NAME: Azure DevOps Pipeline
-    GIT_AUTHOR_EMAIL: azdo.pipeline@cxp.digital
+- template: ./prepare-steps.template.yml
 - task: Bash@3
   displayName: Merging release branch to main
   inputs:
