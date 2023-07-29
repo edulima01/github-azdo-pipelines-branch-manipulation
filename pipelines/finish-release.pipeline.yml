@@ -3,6 +3,8 @@ pr: none
 
 steps:
 - template: ./prepare-steps.template.yml
+  parameters:
+    expectedBranchPrefix: release/
 - task: Bash@3
   displayName: Merging release branch to main
   inputs:

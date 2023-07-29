@@ -3,6 +3,8 @@ pr: none
 
 steps:
 - template: ./prepare-steps.template.yml
+  parameters:
+    expectedBranchPrefix: sprint/
 - task: Bash@3
   displayName: Creating release branch
   inputs:
