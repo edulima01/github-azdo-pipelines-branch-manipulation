@@ -42,4 +42,4 @@ steps:
     filePath: ./scripts/create-branch.sh
   env:
     BRANCH_NAME: $(nextSprintBranchName)
-    BRANCH_PREFIX: release/
+    BRANCH_PREFIX: sprint/
