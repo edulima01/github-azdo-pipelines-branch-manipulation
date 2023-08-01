@@ -4,7 +4,7 @@ steps:
   inputs:
     workingDirectory: $(Build.SourcesDirectory)
     targetType: filePath
-    filePath: ./templates/branch-manipulation/scripts/finish-release/merge-release-branch-to-main.sh
+    filePath: ./templates/branch-manipulation/scripts/try-merge.sh
   env:
-    RELEASE_BRANCH: $(Build.SourceBranchName)
-    RELEASE_BRANCH_PREFIX: release/
+    ORIGIN_BRANCH: release/$(Build.SourceBranchName)
+    DESTINATION_BRANCH: main

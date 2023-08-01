@@ -7,6 +7,12 @@ parameters:
 
 steps:
 - task: Bash@3
+  displayName: Initialize variables for squad ${{parameters.squadName}}
+  inputs:
+    workingDirectory: $(Build.SourcesDirectory)
+    targetType: filePath
+    filePath: ./templates/branch-manipulation/scripts/merge-main/initialize-variables.sh
+- task: Bash@3
   displayName: Check if sprint branch exists for squad ${{parameters.squadName}}
   inputs:
     workingDirectory: $(Build.SourcesDirectory)
@@ -37,5 +43,14 @@ steps:
     SQUAD_NAME: ${{parameters.squadName}}
     SPRINT_BRANCH_PREFIX: sprint/
     RELEASE_BRANCH_PREFIX: release/
-- Try merge
+- task: Bash@3
+  displayName: Merging main into squad ${{parameters.squadName}} branch
+  condition: ne(variables['mergeBranchName'], '')
+  inputs:
+    workingDirectory: $(Build.SourcesDirectory)
+    targetType: filePath
+    filePath: ./templates/branch-manipulation/scripts/try-merge.sh
+  env:
+    ORIGIN_BRANCH: main
+    DESTINATION_BRANCH: $(mergeBranchName)
 - Create integration branches (elaborate...)
