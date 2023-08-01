@@ -25,8 +25,10 @@ jobs:
       env:
           GITHUB_TOKEN: ${{ github.token }}
           HEAD_BRANCH: ${{ github.ref_name }}
-    - name: Close pull request
-      run: gh pr close $HEAD_BRANCH --comment 'PR automatically closed because branch is mergeable.' -d
+    - name: Merge pull request
+      run: |
+        gh pr merge $HEAD_BRANCH -d -b "Merge branch '$HEAD_BRANCH' into '${HEAD_BRANCH#integrate-main-to/}'"
+        gh pr close $HEAD_BRANCH --comment "PR automatically closed because branch is mergeable."
       if: steps.is_mergeable.outputs.result == 'true'
       env:
           GITHUB_TOKEN: ${{ github.token }}
