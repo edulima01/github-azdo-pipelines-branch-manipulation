@@ -15,7 +15,7 @@ jobs:
     - uses: actions/checkout@v3
     - name: Get base branch
       shell: bash
-      run: echo "branch=${ORIGINAL_BRANCH#refs/heads/integrate-main-to/}" >> $GITHUB_OUTPUT
+      run: echo "branch=${ORIGINAL_BRANCH#integrate-main-to/}" >> $GITHUB_OUTPUT
       id: base_branch
       env:
         ORIGINAL_BRANCH: ${{ github.ref_name }}
