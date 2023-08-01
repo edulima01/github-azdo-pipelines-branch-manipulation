@@ -6,7 +6,7 @@ on:
       - integrate-main-to/**/*
 
 jobs:
-  createPR:
+  closePR:
     runs-on: ubuntu-latest
     permissions:
       contents: read
