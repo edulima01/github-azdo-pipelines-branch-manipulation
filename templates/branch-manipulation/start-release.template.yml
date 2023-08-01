@@ -6,13 +6,12 @@ steps:
     targetType: filePath
     filePath: ./templates/branch-manipulation/scripts/create-branch.sh
   env:
-    BRANCH_NAME: $(Build.SourceBranchName)
-    BRANCH_PREFIX: release/
+    CREATE_BRANCH_NAME: release/$(Build.SourceBranchName)
 - task: Bash@3
   displayName: Deleting sprint branch
   inputs:
     workingDirectory: $(Build.SourcesDirectory)
     targetType: filePath
-    filePath: ./templates/branch-manipulation/scripts/start-release/elete-sprint-branch.sh
+    filePath: ./templates/branch-manipulation/scripts/start-release/delete-sprint-branch.sh
   env:
     SPRINT_BRANCH: sprint/$(Build.SourceBranchName)
