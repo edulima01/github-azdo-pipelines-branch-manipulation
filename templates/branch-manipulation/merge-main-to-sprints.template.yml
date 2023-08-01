@@ -13,7 +13,18 @@ steps:
     targetType: filePath
     filePath: ./templates/branch-manipulation/scripts/merge-main/initialize-variables.sh
 - task: Bash@3
+  displayName: Check if squad ${{parameters.squadName}} has finished a release
+  inputs:
+    workingDirectory: $(Build.SourcesDirectory)
+    targetType: filePath
+    filePath: ./templates/branch-manipulation/scripts/merge-main/check-release-finished.sh
+  env:
+    MERGE_MESSAGE: $(Build.SourceVersionMessage)
+    SQUAD_NAME: ${{parameters.squadName}}
+    SPRINT_BRANCH_PREFIX: sprint/
+- task: Bash@3
   displayName: Check if sprint branch exists for squad ${{parameters.squadName}}
+  condition: eq(variables['isMergeNecessary'], 'true')
   inputs:
     workingDirectory: $(Build.SourcesDirectory)
     targetType: filePath
@@ -23,7 +34,7 @@ steps:
     BRANCH_PREFIX: sprint/
 - task: Bash@3
   displayName: Check if release branch exists for squad ${{parameters.squadName}}
-  condition: eq(variables['mergeBranchName'], '')
+  condition: and(eq(variables['isMergeNecessary'], 'true'), eq(variables['mergeBranchName'], ''))
   inputs:
     workingDirectory: $(Build.SourcesDirectory)
     targetType: filePath
@@ -32,20 +43,8 @@ steps:
     SQUAD_NAME: ${{parameters.squadName}}
     BRANCH_PREFIX: release/
 - task: Bash@3
-  displayName: Create next sprint branch for squad ${{parameters.squadName}}
-  condition: eq(variables['mergeBranchName'], '')
-  inputs:
-    workingDirectory: $(Build.SourcesDirectory)
-    targetType: filePath
-    filePath: ./templates/branch-manipulation/scripts/merge-main/create-next-sprint-branch.sh
-  env:
-    MERGE_MESSAGE: $(Build.SourceVersionMessage)
-    SQUAD_NAME: ${{parameters.squadName}}
-    SPRINT_BRANCH_PREFIX: sprint/
-    RELEASE_BRANCH_PREFIX: release/
-- task: Bash@3
   displayName: Merging main into squad ${{parameters.squadName}} branch
-  condition: ne(variables['mergeBranchName'], '')
+  condition: and(eq(variables['isMergeNecessary'], 'true'), ne(variables['mergeBranchName'], ''))
   inputs:
     workingDirectory: $(Build.SourcesDirectory)
     targetType: filePath
@@ -55,6 +54,7 @@ steps:
     DESTINATION_BRANCH: $(mergeBranchName)
 - task: Bash@3
   displayName: Creating integration branch for squad ${{parameters.squadName}}
+  condition: eq(variables['mergeHasConflicts'], true)
   inputs:
     workingDirectory: $(Build.SourcesDirectory)
     targetType: filePath
