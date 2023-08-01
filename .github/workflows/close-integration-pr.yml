@@ -1,0 +1,35 @@
+name: Close PR for integration branches
+
+on:
+  push:
+    branches:
+      - integrate-main-to/*
+
+jobs:
+  createPR:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+    - uses: actions/checkout@v3
+    - name: Check if pr can be closed
+      run: |
+        IS_MERGEABLE=$(gh pr view $HEAD_BRANCH --json mergeable -q ".mergeable")
+        if [[ "$IS_MERGEABLE" = "MERGEABLE" ]]; then
+          echo "result=true" >> $GITHUB_OUTPUT
+        else
+          echo "result=false" >> $GITHUB_OUTPUT
+        fi
+      id: is_mergeable
+      env:
+          GITHUB_TOKEN: ${{ github.token }}
+          HEAD_BRANCH: ${{ github.ref_name }}
+    - name: Close pull request
+      run: gh pr close $HEAD_BRANCH --comment 'PR automatically closed because branch is mergeable.' -d
+      if: steps.is_mergeable.outputs.result == "true"
+      env:
+          GITHUB_TOKEN: ${{ github.token }}
+          HEAD_BRANCH: ${{ github.ref_name }}
+    
+    
