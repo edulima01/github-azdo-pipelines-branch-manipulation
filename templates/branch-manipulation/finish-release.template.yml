@@ -1,0 +1,10 @@
+steps:
+- task: Bash@3
+  displayName: Merging release branch to main
+  inputs:
+    workingDirectory: $(Build.SourcesDirectory)
+    targetType: filePath
+    filePath: ./templates/branch-manipulation/scripts/try-merge.sh
+  env:
+    ORIGIN_BRANCH: release/$(Build.SourceBranchName)
+    DESTINATION_BRANCH: main

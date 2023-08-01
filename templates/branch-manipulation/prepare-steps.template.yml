@@ -1,0 +1,26 @@
+parameters:
+- name: expectedBranchPrefix
+  type: string
+
+steps:
+- checkout: self
+  persistCredentials: 'true'
+  fetchDepth: '0'
+- task: Bash@3
+  displayName: Set git author name/email
+  inputs:
+    workingDirectory: $(Build.SourcesDirectory)
+    targetType: filePath
+    filePath: ./templates/branch-manipulation/scripts/prepare/set-git-author.sh
+  env:
+    GIT_AUTHOR_NAME: Azure DevOps Pipeline
+    GIT_AUTHOR_EMAIL: azdo.pipeline@cxp.digital
+- task: Bash@3
+  displayName: Validate correct branch
+  inputs:
+    workingDirectory: $(Build.SourcesDirectory)
+    targetType: filePath
+    filePath: ./templates/branch-manipulation/scripts/prepare/validate-correct-branch.sh
+  env:
+    CURRENT_BRANCH: $(Build.SourceBranch)
+    EXPECTED_BRANCH_PREFIX: ${{parameters.expectedBranchPrefix}}

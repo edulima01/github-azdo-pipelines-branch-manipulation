@@ -1,0 +1,63 @@
+parameters:
+  - name: squadName
+    type: string
+    values:
+      - leo
+      - tigris
+
+steps:
+- task: Bash@3
+  displayName: Initialize variables for squad ${{parameters.squadName}}
+  inputs:
+    workingDirectory: $(Build.SourcesDirectory)
+    targetType: filePath
+    filePath: ./templates/branch-manipulation/scripts/merge-main/initialize-variables.sh
+- task: Bash@3
+  displayName: Check if sprint branch exists for squad ${{parameters.squadName}}
+  inputs:
+    workingDirectory: $(Build.SourcesDirectory)
+    targetType: filePath
+    filePath: ./templates/branch-manipulation/scripts/merge-main/check-squad-branch-exists.sh
+  env:
+    SQUAD_NAME: ${{parameters.squadName}}
+    BRANCH_PREFIX: sprint/
+- task: Bash@3
+  displayName: Check if release branch exists for squad ${{parameters.squadName}}
+  condition: eq(variables['mergeBranchName'], '')
+  inputs:
+    workingDirectory: $(Build.SourcesDirectory)
+    targetType: filePath
+    filePath: ./templates/branch-manipulation/scripts/merge-main/check-squad-branch-exists.sh
+  env:
+    SQUAD_NAME: ${{parameters.squadName}}
+    BRANCH_PREFIX: release/
+- task: Bash@3
+  displayName: Create next sprint branch for squad ${{parameters.squadName}}
+  condition: eq(variables['mergeBranchName'], '')
+  inputs:
+    workingDirectory: $(Build.SourcesDirectory)
+    targetType: filePath
+    filePath: ./templates/branch-manipulation/scripts/merge-main/create-next-sprint-branch.sh
+  env:
+    MERGE_MESSAGE: $(Build.SourceVersionMessage)
+    SQUAD_NAME: ${{parameters.squadName}}
+    SPRINT_BRANCH_PREFIX: sprint/
+    RELEASE_BRANCH_PREFIX: release/
+- task: Bash@3
+  displayName: Merging main into squad ${{parameters.squadName}} branch
+  condition: ne(variables['mergeBranchName'], '')
+  inputs:
+    workingDirectory: $(Build.SourcesDirectory)
+    targetType: filePath
+    filePath: ./templates/branch-manipulation/scripts/try-merge.sh
+  env:
+    ORIGIN_BRANCH: main
+    DESTINATION_BRANCH: $(mergeBranchName)
+- task: Bash@3
+  displayName: Creating integration branch for squad ${{parameters.squadName}}
+  inputs:
+    workingDirectory: $(Build.SourcesDirectory)
+    targetType: filePath
+    filePath: ./templates/branch-manipulation/scripts/create-branch.sh
+  env:
+    CREATE_BRANCH_NAME: integrate-main-to/$(mergeBranchName)
