@@ -27,7 +27,7 @@ jobs:
           HEAD_BRANCH: ${{ github.ref_name }}
     - name: Close pull request
       run: gh pr close $HEAD_BRANCH --comment 'PR automatically closed because branch is mergeable.' -d
-      if: steps.is_mergeable.outputs.result == "true"
+      if: steps.is_mergeable.outputs.result == 'true'
       env:
           GITHUB_TOKEN: ${{ github.token }}
           HEAD_BRANCH: ${{ github.ref_name }}
