@@ -53,4 +53,11 @@ steps:
   env:
     ORIGIN_BRANCH: main
     DESTINATION_BRANCH: $(mergeBranchName)
-- Create integration branches (elaborate...)
+- task: Bash@3
+  displayName: Creating integration branch for squad ${{parameters.squadName}}
+  inputs:
+    workingDirectory: $(Build.SourcesDirectory)
+    targetType: filePath
+    filePath: ./templates/branch-manipulation/scripts/create-branch.sh
+  env:
+    CREATE_BRANCH_NAME: integrate-main-to/$(mergeBranchName)
