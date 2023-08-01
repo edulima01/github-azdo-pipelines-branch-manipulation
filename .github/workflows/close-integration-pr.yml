@@ -3,7 +3,7 @@ name: Close PR for integration branches
 on:
   push:
     branches:
-      - integrate-main-to/*
+      - integrate-main-to/**/*
 
 jobs:
   createPR:
