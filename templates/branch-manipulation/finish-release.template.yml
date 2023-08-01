@@ -1,0 +1,28 @@
+steps:
+- task: Bash@3
+  displayName: Merging release branch to main
+  inputs:
+    workingDirectory: $(Build.SourcesDirectory)
+    targetType: filePath
+    filePath: ./templates/branch-manipulation/scripts/finish-release/merge-release-branch-to-main.sh
+  env:
+    RELEASE_BRANCH: $(Build.SourceBranchName)
+    RELEASE_BRANCH_PREFIX: release/
+- task: Bash@3
+  displayName: Set next sprint branch name
+  inputs:
+    workingDirectory: $(Build.SourcesDirectory)
+    targetType: filePath
+    filePath: ./templates/branch-manipulation/scripts/finish-release/next-sprint-branch-name.sh
+  env:
+    CURRENT_BRANCH_NAME: $(Build.SourceBranchName)
+    NAME_VARIABLE: nextSprintBranchName
+- task: Bash@3
+  displayName: Create next sprint branch
+  inputs:
+    workingDirectory: $(Build.SourcesDirectory)
+    targetType: filePath
+    filePath: ./templates/branch-manipulation/scripts/create-branch.sh
+  env:
+    BRANCH_NAME: $(nextSprintBranchName)
+    BRANCH_PREFIX: sprint/
