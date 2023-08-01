@@ -11,7 +11,7 @@ steps:
   inputs:
     workingDirectory: $(Build.SourcesDirectory)
     targetType: filePath
-    filePath: ./scripts/set-git-author.sh
+    filePath: ./templates/branch-manipulation/scripts/prepare/set-git-author.sh
   env:
     GIT_AUTHOR_NAME: Azure DevOps Pipeline
     GIT_AUTHOR_EMAIL: azdo.pipeline@cxp.digital
@@ -20,7 +20,7 @@ steps:
   inputs:
     workingDirectory: $(Build.SourcesDirectory)
     targetType: filePath
-    filePath: ./scripts/validate-correct-branch.sh
+    filePath: ./templates/branch-manipulation/scripts/prepare/validate-correct-branch.sh
   env:
     CURRENT_BRANCH: $(Build.SourceBranch)
     EXPECTED_BRANCH_PREFIX: ${{parameters.expectedBranchPrefix}}
