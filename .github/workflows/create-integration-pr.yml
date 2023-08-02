@@ -1,4 +1,4 @@
-name: Create PR for integration branches
+name: Create PR for integration branches automatically
 
 on:
   push:
