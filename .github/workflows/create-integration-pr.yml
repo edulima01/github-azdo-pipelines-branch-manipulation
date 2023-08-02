@@ -26,12 +26,12 @@ jobs:
         HEAD_BRANCH: ${{ github.ref_name }}
     - name: Get base branch
       id: base_branch
-      if: steps.pr_exists.outputs.result == "false"
+      if: steps.pr_exists.outputs.result == 'false'
       run: echo "branch=${ORIGINAL_BRANCH#integrate-main-to/}" >> $GITHUB_OUTPUT
       env:
         ORIGINAL_BRANCH: ${{ github.ref_name }}
     - name: Create pull request
-      if: steps.pr_exists.outputs.result == "false"
+      if: steps.pr_exists.outputs.result == 'false'
       run: gh pr create -B $BASE_BRANCH -H $HEAD_BRANCH --title "Merge branch 'main' into '$BASE_BRANCH'" --body "Pull request automatically created because conflicts existed between 'main' and '$BASE_BRANCH'"
       env:
         GITHUB_TOKEN: ${{ github.token }}
