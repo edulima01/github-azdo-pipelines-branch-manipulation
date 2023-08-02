@@ -45,6 +45,8 @@ jobs:
       pull-requests: write
     steps:
     - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
     - name: Check if pr can be closed
       id: is_mergeable
       run: |
@@ -59,7 +61,10 @@ jobs:
         HEAD_BRANCH: ${{ github.ref_name }}
     - name: Merge pull request
       if: steps.is_mergeable.outputs.result == 'true'
-      run: gh pr merge --merge --delete-branch --subject "Merge branch '$HEAD_BRANCH' into '${HEAD_BRANCH#integrate-main-to/}'"
+      run: |
+        BASE_BRANCH=${HEAD_BRANCH#integrate-main-to/}
+        git checkout $BASE_BRANCH
+        gh pr merge $HEAD_BRANCH --merge --delete-branch --subject "Merge branch '$HEAD_BRANCH' into '$BASE_BRANCH'"
       env:
         GH_TOKEN: ${{ github.token }}
         HEAD_BRANCH: ${{ github.ref_name }}
