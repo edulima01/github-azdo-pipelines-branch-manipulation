@@ -9,7 +9,7 @@ if [[ "$?" == "1" ]]; then
     exit 1
 fi
 
-git commit -m "Merge branch 'origin/$ORIGIN_BRANCH' into '$DESTINATION_BRANCH'"
+git commit -m "Merge ${BRANCH_TYPE:-branch} 'origin/$ORIGIN_BRANCH' into '$DESTINATION_BRANCH'"
 git push
 
 git checkout $ORIGIN_BRANCH
