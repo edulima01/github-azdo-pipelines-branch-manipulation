@@ -1,6 +1,9 @@
 parameters:
 - name: expectedBranchPrefix
   type: string
+- name: isTag
+  type: boolean
+  default: 'False'
 
 steps:
 - checkout: self
@@ -24,3 +27,4 @@ steps:
   env:
     CURRENT_BRANCH: $(Build.SourceBranch)
     EXPECTED_BRANCH_PREFIX: ${{parameters.expectedBranchPrefix}}
+    IS_TAG: ${{parameters.isTag}}

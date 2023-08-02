@@ -1,0 +1,40 @@
+parameters:
+- name: incidentBranchName
+  displayName: Name to give to incident branch (without 'hotfix' prefix)
+  type: string
+
+steps:
+- task: Bash@3
+  displayName: Getting release branch name
+  inputs:
+    workingDirectory: $(Build.SourcesDirectory)
+    targetType: filePath
+    filePath: ./templates/branch-manipulation/scripts/start-incident/get-release-branch-name.sh
+  env:
+    TAG_NAME: $(Build.SourceBranchName)
+    TAG_PREFIX: release-
+    RELEASE_PREFIX: release/
+- task: Bash@3
+  displayName: Creating release branch
+  inputs:
+    workingDirectory: $(Build.SourcesDirectory)
+    targetType: filePath
+    filePath: ./templates/branch-manipulation/scripts/create-branch.sh
+  env:
+    CREATE_BRANCH_NAME: $(releaseBranchName)
+- task: Bash@3
+  displayName: Checkout release branch
+  inputs:
+    workingDirectory: $(Build.SourcesDirectory)
+    targetType: filePath
+    filePath: ./templates/branch-manipulation/scripts/start-incident/checkout-release-branch.sh
+  env:
+    RELEASE_BRANCH_NAME: $(releaseBranchName)
+- task: Bash@3
+  displayName: Creating incident branch
+  inputs:
+    workingDirectory: $(Build.SourcesDirectory)
+    targetType: filePath
+    filePath: ./templates/branch-manipulation/scripts/create-branch.sh
+  env:
+    CREATE_BRANCH_NAME: hotfix/${{parameters.incidentBranchName}}

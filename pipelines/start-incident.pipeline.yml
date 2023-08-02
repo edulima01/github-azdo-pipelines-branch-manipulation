@@ -1,0 +1,19 @@
+parameters:
+- name: incidentBranchName
+  displayName: Name to give to incident branch (without 'hotfix' prefix)
+  type: string
+
+variables:
+- name: tagNamePrefix
+  value: release-
+- name: hotfixBranchPrefix
+  value: hotfix-
+
+steps:
+- template: ../templates/branch-manipulation/prepare-steps.template.yml
+  parameters:
+    expectedBranchPrefix: release-
+    isTag: True
+- template: ../templates/branch-manipulation/start-incident.template.yml
+  parameters:
+    incidentBranchName: ${{parameters.incidentBranchName}}

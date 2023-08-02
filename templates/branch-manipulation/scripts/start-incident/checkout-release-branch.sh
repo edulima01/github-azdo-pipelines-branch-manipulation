@@ -1,0 +1,1 @@
+git checkout $RELEASE_BRANCH_NAME
