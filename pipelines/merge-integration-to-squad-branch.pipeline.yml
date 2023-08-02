@@ -1,0 +1,11 @@
+trigger:
+  branches:
+    include:
+      - integrate-main-to/*
+pr: none
+
+steps:
+- template: ../templates/branch-manipulation/prepare-steps.template.yml
+  parameters:
+    expectedBranchPrefix: integrate-main-to/
+- template: ../templates/branch-manipulation/merge-integration-to-squad-branch.template.yml
