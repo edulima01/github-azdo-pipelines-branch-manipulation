@@ -35,7 +35,7 @@ jobs:
     - name: Create pull request
       id: create_pr
       run: |
-        if [[ "$CREATE_PR" = "true" ]]; then
+        if [[ ! "$PR_EXISTS" = "true" ]]; then
           gh pr create -B $BASE_BRANCH -H $HEAD_BRANCH --title "Merge branch 'main' into '$BASE_BRANCH'" --body "Pull request automatically created because conflicts existed between 'main' and '$BASE_BRANCH'"
           echo "created=true" >> $GITHUB_OUTPUT
         else
@@ -45,7 +45,7 @@ jobs:
         GH_TOKEN: ${{ github.token }}
         HEAD_BRANCH: ${{ github.ref_name }}
         BASE_BRANCH: ${{ steps.base_branch.outputs.branch }}
-        CREATE_PR: ${{ steps.pr_exists.outputs.result }}
+        PR_EXISTS: ${{ steps.pr_exists.outputs.result }}
   closePR:
     runs-on: ubuntu-latest
     needs: createPR
