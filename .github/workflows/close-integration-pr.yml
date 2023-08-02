@@ -14,6 +14,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Check if pr can be closed
+      id: is_mergeable
       run: |
         IS_MERGEABLE=$(gh pr view $HEAD_BRANCH --json mergeable -q ".mergeable")
         if [[ "$IS_MERGEABLE" = "MERGEABLE" ]]; then
@@ -21,17 +22,14 @@ jobs:
         else
           echo "result=false" >> $GITHUB_OUTPUT
         fi
-      id: is_mergeable
       env:
-          GITHUB_TOKEN: ${{ github.token }}
-          HEAD_BRANCH: ${{ github.ref_name }}
+        GITHUB_TOKEN: ${{ github.token }}
+        HEAD_BRANCH: ${{ github.ref_name }}
     - name: Merge pull request
-      run: |
-        gh pr merge $HEAD_BRANCH -d --merge -b "Merge branch '$HEAD_BRANCH' into '${HEAD_BRANCH#integrate-main-to/}'"
-        gh pr close $HEAD_BRANCH --comment "PR automatically closed because branch is mergeable."
       if: steps.is_mergeable.outputs.result == 'true'
+      run: gh pr merge $HEAD_BRANCH -d --merge -b "Merge branch '$HEAD_BRANCH' into '${HEAD_BRANCH#integrate-main-to/}'"
       env:
-          GITHUB_TOKEN: ${{ github.token }}
-          HEAD_BRANCH: ${{ github.ref_name }}
+        GITHUB_TOKEN: ${{ github.token }}
+        HEAD_BRANCH: ${{ github.ref_name }}
     
     
