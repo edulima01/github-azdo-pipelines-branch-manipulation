@@ -23,7 +23,7 @@ jobs:
           echo "result=false" >> $GITHUB_OUTPUT
         fi
       env:
-        GITHUB_TOKEN: ${{ github.token }}
+        GH_TOKEN: ${{ github.token }}
         HEAD_BRANCH: ${{ github.ref_name }}
     - name: Get base branch
       id: base_branch
@@ -35,7 +35,7 @@ jobs:
       if: steps.pr_exists.outputs.result == 'false'
       run: gh pr create -B $BASE_BRANCH -H $HEAD_BRANCH --title "Merge branch 'main' into '$BASE_BRANCH'" --body "Pull request automatically created because conflicts existed between 'main' and '$BASE_BRANCH'"
       env:
-        GITHUB_TOKEN: ${{ github.token }}
+        GH_TOKEN: ${{ github.token }}
         HEAD_BRANCH: ${{ github.ref_name }}
         BASE_BRANCH: ${{ steps.base_branch.outputs.branch }}
     

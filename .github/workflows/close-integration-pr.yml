@@ -23,13 +23,13 @@ jobs:
           echo "result=false" >> $GITHUB_OUTPUT
         fi
       env:
-        GITHUB_TOKEN: ${{ github.token }}
+        GH_TOKEN: ${{ github.token }}
         HEAD_BRANCH: ${{ github.ref_name }}
     - name: Merge pull request
       if: steps.is_mergeable.outputs.result == 'true'
       run: gh pr merge $HEAD_BRANCH -d --merge -b "Merge branch '$HEAD_BRANCH' into '${HEAD_BRANCH#integrate-main-to/}'"
       env:
-        GITHUB_TOKEN: ${{ github.token }}
+        GH_TOKEN: ${{ github.token }}
         HEAD_BRANCH: ${{ github.ref_name }}
     
     
