@@ -17,10 +17,10 @@ jobs:
       id: pr_exists
       run: |
         PR_INFO=$(gh pr list --state open --head $HEAD_BRANCH)
-        if [[ "$PR_INFO" =~ ^no[[:space:]]pull[[:space:]]requests.* ]]; then
-          echo "result=false" >> $GITHUB_OUTPUT
-        else
+        if [[ ! -z "$PR_INFO" ]]; then
           echo "result=true" >> $GITHUB_OUTPUT
+        else
+          echo "result=false" >> $GITHUB_OUTPUT
         fi
       env:
         GITHUB_TOKEN: ${{ github.token }}
