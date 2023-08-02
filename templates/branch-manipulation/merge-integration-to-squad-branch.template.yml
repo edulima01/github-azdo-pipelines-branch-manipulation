@@ -17,3 +17,12 @@ steps:
   env:
     ORIGIN_BRANCH: $(integrationBranchOriginName)
     DESTINATION_BRANCH: $(integrationBranchDestinationName)
+- task: Bash@3
+  displayName: Deleting integration branch
+  condition: eq(variables['mergeHasConflicts'], 'false')
+  inputs:
+    workingDirectory: $(Build.SourcesDirectory)
+    targetType: filePath
+    filePath: ./templates/branch-manipulation/scripts/delete-branch.sh
+  env:
+    BRANCH_NAME: $(integrationBranchOriginName)

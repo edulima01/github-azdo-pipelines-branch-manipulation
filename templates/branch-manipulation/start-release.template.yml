@@ -12,6 +12,6 @@ steps:
   inputs:
     workingDirectory: $(Build.SourcesDirectory)
     targetType: filePath
-    filePath: ./templates/branch-manipulation/scripts/start-release/delete-sprint-branch.sh
+    filePath: ./templates/branch-manipulation/scripts/delete-branch.sh
   env:
-    SPRINT_BRANCH: sprint/$(Build.SourceBranchName)
+    BRANCH_NAME: sprint/$(Build.SourceBranchName)
