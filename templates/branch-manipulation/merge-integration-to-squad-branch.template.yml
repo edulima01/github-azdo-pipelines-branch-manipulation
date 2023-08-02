@@ -4,7 +4,7 @@ steps:
   inputs:
     workingDirectory: $(Build.SourcesDirectory)
     targetType: filePath
-    filePath: ./templates/branch-manipulation/scripts/get-original-and-destination-branches-from-integration-branch-name.sh
+    filePath: ./templates/branch-manipulation/scripts/merge-integration/get-original-and-destination-branches-from-integration-branch-name.sh
   env:
     INTEGRATION_BRANCH: $(Build.SourceBranch)
     INTEGRATION_BRANCH_PREFIX: integrate-main-to/
