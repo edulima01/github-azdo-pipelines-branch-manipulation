@@ -1,0 +1,11 @@
+variables:
+- name: tagNamePrefix
+  value: release-
+- name: hotfixBranchPrefix
+  value: hotfix-
+
+steps:
+- template: ../templates/branch-manipulation/prepare-steps.template.yml
+  parameters:
+    expectedBranchPrefix: release/
+- template: ../templates/branch-manipulation/finish-incident.template.yml
