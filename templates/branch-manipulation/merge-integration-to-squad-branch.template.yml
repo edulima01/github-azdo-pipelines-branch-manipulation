@@ -1,0 +1,19 @@
+steps:
+- task: Bash@3
+  displayName: Getting correct original and destination branches
+  inputs:
+    workingDirectory: $(Build.SourcesDirectory)
+    targetType: filePath
+    filePath: ./templates/branch-manipulation/scripts/get-original-and-destination-branches-from-integration-branch-name.sh
+  env:
+    INTEGRATION_BRANCH: $(Build.SourceBranch)
+    INTEGRATION_BRANCH_PREFIX: integrate-main-to/
+- task: Bash@3
+  displayName: Trying to merge to squad branch
+  inputs:
+    workingDirectory: $(Build.SourcesDirectory)
+    targetType: filePath
+    filePath: ./templates/branch-manipulation/scripts/try-merge.sh
+  env:
+    ORIGIN_BRANCH: $(integrationBranchOriginName)
+    DESTINATION_BRANCH: $(integrationBranchDestinationName)
