@@ -45,7 +45,7 @@ jobs:
         GH_TOKEN: ${{ github.token }}
         HEAD_BRANCH: ${{ github.ref_name }}
         BASE_BRANCH: ${{ steps.base_branch.outputs.branch }}
-        CREATE_PR: steps.pr_exists.outputs.result
+        CREATE_PR: ${{ steps.pr_exists.outputs.result }}
   closePR:
     runs-on: ubuntu-latest
     needs: createPR
