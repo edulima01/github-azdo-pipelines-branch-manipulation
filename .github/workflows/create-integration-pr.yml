@@ -16,8 +16,8 @@ jobs:
     - name: Checks if PR already exists
       id: pr_exists
       run: |
-        PR_INFO=$(gh pr list --state open --head $HEAD_BRANCH)
-        if [[ ! -z "$PR_INFO" ]]; then
+        PR_INFO=$(gh pr list --state open --head $HEAD_BRANCH --json title)
+        if [[ ! "$PR_INFO" = "[]" ]]; then
           echo "result=true" >> $GITHUB_OUTPUT
         else
           echo "result=false" >> $GITHUB_OUTPUT
