@@ -16,4 +16,5 @@ CREATE_BRANCH_NAME="$SPRINT_BRANCH_PREFIX$PADDED_SPRINT-$CURRENT_SQUAD"
 
 source ./templates/branch-manipulation/scripts/create-branch.sh
 
-git checkout -b main origin/main
+git checkout main
+git pull origin

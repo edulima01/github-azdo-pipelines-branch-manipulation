@@ -1,9 +1,11 @@
-git checkout -b $DESTINATION_BRANCH origin/$DESTINATION_BRANCH
+git checkout $DESTINATION_BRANCH
+git pull origin
 
 git merge --no-ff --no-commit origin/$ORIGIN_BRANCH
 if [[ "$?" == "1" ]]; then
     git reset --hard
-    git checkout -b $ORIGIN_BRANCH origin/$ORIGIN_BRANCH
+    git checkout $ORIGIN_BRANCH
+    git pull origin
     echo "##vso[task.setvariable variable=mergeHasConflicts;]true"
     echo "##vso[task.logissue type=error]There are conflicts between origin $ORIGIN_BRANCH and destination $DESTINATION_BRANCH. Automatic merge is aborted."
     exit 1
@@ -12,6 +14,7 @@ fi
 git commit -m "Merge ${BRANCH_TYPE:-branch} 'origin/$ORIGIN_BRANCH' into '$DESTINATION_BRANCH'"
 git push
 
-git checkout -b $ORIGIN_BRANCH origin/$ORIGIN_BRANCH
+git checkout $ORIGIN_BRANCH
+git pull origin
 
 echo "##vso[task.setvariable variable=mergeHasConflicts;]false"
