@@ -9,6 +9,9 @@ steps:
 - checkout: self
   persistCredentials: 'true'
   fetchDepth: '0'
+- bash: |
+    git fetch origin
+  displayName: Fetching from origin
 - task: Bash@3
   displayName: Set git author name/email
   inputs:
