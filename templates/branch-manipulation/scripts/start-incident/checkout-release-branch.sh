@@ -1,1 +1,1 @@
-git checkout $RELEASE_BRANCH_NAME
+git checkout -b $RELEASE_BRANCH_NAME origin/$RELEASE_BRANCH_NAME
